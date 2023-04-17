@@ -35,19 +35,19 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                 html.Div(dcc.Graph(id='success-pie-chart')),
                                 html.Br(),
 
-                                html.P("Payload range (Kg):"),
+                                #html.P("Payload range (Kg):"),
                                 # TASK 3: Add a slider to select payload range
                                 #dcc.RangeSlider(id='payload-slider',...)
-                                dcc.RangeSlider(id='payload-slider',
-                                                min=0, max=10000, step=1000,
-                                                marks={0: '0',
-                                                    100: '100'},
-                                                value=[min_payload, max_payload]),
+                                #dcc.RangeSlider(id='payload-slider',
+                                #                min=0, max=10000, step=1000,
+                                #                marks={0: '0',
+                                #                    100: '100'},
+                                #                value=[min_payload, max_payload]),
                                 # TASK 4: Add a scatter chart to show the correlation between payload and launch success
                                 # return the outcomes piechart for a selected site
                                 #html.Div(dcc.Graph(id='success-scatter-chart')),
+                                #html.Div(dcc.Graph(id='success-payload-scatter-chart')),
                                 html.Br(),                                
-                                html.Div(dcc.Graph(id='success-payload-scatter-chart')),
                                 ])
 
 # TASK 2:
@@ -62,30 +62,30 @@ def get_pie_chart(entered_site):
         title='Success Rate by Launch Site')
         return fig
     else:
-        filtered_df=spacex_df[spacex_df['Launch Site']==entered_site]
+        filtered_df = spacex_df[spacex_df['Launch Site']==entered_site]
         fig = px.pie(filtered_df, values='class', 
-        names='Launch Site', 
-        title='Success Rate by Launch Site')
+        names='class', 
+        title='Success Rate by Launch Site'+entered_site)
         return fig
 
 # TASK 4:
 # Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
-@app.callback(Output(component_id='success-payload-scatter-chart', component_property='figure'),
-            Input(component_id='site-dropdown', component_property='value'),
-            Input(component_id='payload-slider', component_property='value'))
-def get_scatter_chart(entered_site, payload):
-    filtered_df = spacex_df
-    if entered_site == 'ALL':
-        fig = px.scatter(filtered_df, x=payload, y='Class', values='class', 
-        names='PayloadMass', color="Booster Version Category",
-        title='Success Rate by Payload')
-        return fig
-    else:
-        filtered_df=spacex_df[spacex_df['Launch Site']==entered_site]
-        fig = px.scatter(filtered_df, x=payload, y='Class', values='class', 
-        names='PayloadMass', color="Booster Version Category",
-        title='Success Rate by Payload')
-        return fig
+#@app.callback(Output(component_id='success-payload-scatter-chart', component_property='figure'),
+#            Input(component_id='site-dropdown', component_property='value'),
+#            Input(component_id='payload-slider', component_property='value'))
+#def get_scatter_chart(entered_site, payload):
+#    filtered_df = spacex_df
+#    if entered_site == 'ALL':
+#        fig = px.scatter(filtered_df, x=payload, y='class',  
+#        names='PayloadMass', color="Booster Version Category",
+#        title='Success Rate by Payload')
+#        return fig
+#    else:
+#        filtered_df=spacex_df[spacex_df['Launch Site']==entered_site]
+#        fig = px.scatter(filtered_df, x=payload, y='class',  
+#        color="Booster Version Category",
+#        title='Success Rate by Payload')
+#        return fig
 
 
 # Run the app
